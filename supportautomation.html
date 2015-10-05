@@ -1,0 +1,272 @@
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <title>Asset Management</title>
+    
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    
+  <!-- Personal Javascript file -->
+  <script src="script.js"></script>
+</head>
+
+<body>
+  
+  {{> sitewrapper}}
+
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+</body>
+
+<template name="sitewrapper">
+  <div class="site-wrapper">
+<!--  {{> collapsedTools}}-->
+
+  {{> toolbar}}
+
+            <div class="viewer" name="viewer" id="viewer">
+              
+{{> assetModal}}
+
+              
+            <div class="row"> 
+                <div class="col-sm-12 col-md-12 col-lg-12 vheader">
+                  <!--              Testing adding a dropdown!-->
+                    <div class="input-group searchmod">
+                      <form class="search">
+                        <div class="dropdown ddmod">
+                          <button class="btn btn-default dropdown-toggle ddbtnmod" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                              {{fieldChooser}}
+                              <span class="caret"></span>
+                          </button>
+                            <ul class="dropdown-menu ulMod" aria-labelledby="dropdownMenu1">
+                              <li><a class="ddField" id="idDevice" href="#" >Device ID</a></li>
+                              <li><a class="ddField" id="idDeviceType" href="#">Device Type</a></li>
+                              <li><a class="ddField" id="idCustomer" href="#">Customer ID</a></li>
+                              <li><a class="ddField" id="serialNbr" href="#">Serial Number</a></li>
+                              <li><a class="ddField" id="lastCommunication" href="#">Last Communication</a></li>
+                              <li><a class="ddField" id="smsNbr" href="#">SMS Number</a></li>
+                              <li><a class="ddField" id="itemNbr" href="#">Item Number</a></li>
+                              <li><a class="ddField" id="lastIdEventCode" href="#">Last Event Code</a></li>
+                              <li><a class="ddField" id="lastBatteryVoltage" href="#">Last Voltage</a></li>
+                            </ul>
+                          </div>
+                          <div class="input-group searchInputGroup">
+                              <input id="searchInputBar" type="text" class="inputmod form-control searchbox" placeholder="Search Value">
+                              <span class="input-group-btn">
+                                  <button id="searchAddOnButton" class="inputaddonmod btn glyphicon glyphicon-search" type="button">
+                                  </button>
+                              </span>
+                          </div><!-- /input-group -->
+                        </form>
+                    </div>
+                </div>
+              <div  class="col-sm-12 col-md-12 col-lg-12 vsubhead" id="vsubhead" name="vsubhead">
+                <span class="assetCount">
+                   Showing {{assetsFound}} of {{totalAssets}} Assets
+                  </span>
+              </div>
+            </div>
+
+              
+            <!-- Device Panels -->
+              <div class="row innerrow">
+
+                {{#each tasks}}
+                    {{> tile}}
+                {{/each}}
+
+            </div>
+          </div>
+      </div>
+</template>
+
+<template name="map">
+  <div id="assetmap" class="map leaflet-container leaflet-touch"></div>
+</template>
+
+<template name="assetModal">
+<div class="modal fade" id="assetModal" tabindex="-1" role="dialog" aria-labelledby="assetModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content modalstyle">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="assetModalLabel">{{#with assetModalContext}}idDevice: {{idDevice}} &nbsp;&nbsp; Serial Number: {{serialNbr}}{{/with}}</h4>
+        </div>
+        <div class="modal-body">
+          {{> map}}
+
+          <table class="modaltable table table-striped table-hover">
+            <tbody>
+              <tr>
+                <td colspan="4"><strong> Asset Details</strong>
+                </td>
+              </tr>
+              {{#each buildAssetValues}}
+                <tr>
+                  <td><strong>{{this.[0].[0]}}</strong>
+                  </td>
+                  <td>{{this.[0].[1]}}
+                  </td>
+                  <td><strong>{{this.[1].[0]}}</strong>
+                  </td>
+                  <td>{{this.[1].[1]}}
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+
+          <div class="modalrow">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ullamcorper et purus sit amet gravida. Sed tristique dui quam, ac maximus velit sollicitudin nec. Maecenas vel elementum sem, non facilisis quam.<br><br> Fusce gravida, dolor non rutrum tincidunt, mi ante tincidunt neque, eu pretium lacus metus sit amet libero. Aliquam placerat magna ac libero tincidunt, vel facilisis ligula lacinia. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse rhoncus leo molestie ante condimentum, sed molestie nulla pulvinar. Proin at dui venenatis, <br><br>vestibulum mauris quis, cursus odio. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec vitae justo mauris. Etiam sed est pharetra, mollis nunc vel, tincidunt magna. Nam nulla tortor, faucibus eu elementum nec, tincidunt vel tellus. <br><br>Curabitur eleifend <br><br>euismod ligula sit amet lobortis.
+  <br><br>
+  Sed ultrices nibh lacus, <br>nec vulputate erat elementum nec.<br> Donec euismod augue urna, <br>vulputate consequat diam bibendum in. Praesent fermentum dolor non congue porta. Aliquam lobortis velit cursus orci ornare, eu efficitur quam efficitur.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btnstyle btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btnstyle btn-primary">Save changes</button>
+        </div>
+      </div>
+  </div>
+</div>
+</template>
+
+<template name="toolbar">
+    <div id="toolbar" class="toolsbarcol">
+          <div class="profhold"><img class="profpic img-circle" src="profilepic.png"></div>
+          <div class="profline"></div>
+
+          <div class="icohold icoidle" id="assets" name="assets" aria-hidden="true">
+              <button type="button" class="btn expbtnstyle glyphicon glyphicon-th">
+                  <span id="mb1" class="toolsbtn expmenuhidden">Assets</span>
+              </button>
+          </div>
+
+          <div class="icohold icoidle" id="viewmap" name="viewmap" aria-hidden="true">
+              <button type="button" name="viewmap" class="btn expbtnstyle glyphicon glyphicon-globe">
+                  <span id="mb2" class="toolsbtn expmenuhidden">Map</span>
+              </button>
+          </div>
+
+          <div class="icohold" id="sms" name="sms" aria-hidden="true">
+              <button type="button" class="btn expbtnstyle glyphicon glyphicon-erase">
+                  <span id="mb3"  class="toolsbtn expmenuhidden">SMS</span>
+              </button>
+          </div>
+
+          <div class="icohold" id="search" name="search" aria-hidden="true">
+              <button id="hamburger" type="button" class="btn expbtnstyle glyphicon glyphicon-menu-hamburger">
+                  <span  class="toolsbtn expmenuhidden">Menu</span>
+              </button>
+          </div>
+
+          <div class="icobtm" aria-hidden="true">
+              <button type="button" id="expandButton" class="expandTools btn glyphicon glyphicon-option-horizontal">
+              </button>
+          </div>
+        </div>
+    <div id="toolbarsub" class="toolsbarsubcol">
+      <div class="submenuheader">
+        FILTERS
+      </div>
+      
+      <div class="submenuhold" aria-hidden="true">
+          <a href="" class="submenulink" id="oneDayNoComm">
+            No Communications last 24 hours
+          </a>
+      </div>
+      <div class="submenuhold" aria-hidden="true">
+          <a href="" class="submenulink" name="somethingElse">
+            Something Else
+          </a>
+      </div>
+      <div class="submenuhold" aria-hidden="true">
+          <a href="" class="submenulink" name="yetMoreFilters">
+            Yet More Filters
+          </a>
+      </div>
+      <div class="submenuhold" aria-hidden="true">
+          <a href="" class="submenulink" name="makeATemplate">
+            Make This a Template
+          </a>
+      </div>
+      <div class="submenuhold" aria-hidden="true">
+          <a href="" class="submenulink" name="pullCollection">
+            And Pull From Collection
+          </a>
+      </div>
+      
+    </div>
+</template>
+
+<template name="tile">
+    <div class="wildstyle">
+      <div class="wsheadcontainer">
+        <div class="wsHeadlines">
+          
+          <div class="wsone">
+              <span class="wsoneicon glyphicon glyphicon-heart-empty"></span>
+              {{#if pinned}}
+                <span class="wsicopinned wsoneicon glyphicon glyphicon-pushpin"></span>
+              {{else}}
+                <span class="wsoneicon glyphicon glyphicon-pushpin"></span>
+              {{/if}}
+
+          </div><!--Headline Icons-->
+          <div class="wswrapone">
+            <div class="wstwo">
+              {{itemNbr}}: {{serialNbrDisplayed}}
+            </div><!--Name-->
+            <div class="wsthree">
+              <div class="wsthreeicon"><span class="glyphicon glyphicon-time"></span></div><!--Body/Event Icon-->
+              <div class="wsthreeevent">
+                {{lastCommunication}}
+              </div><!--Body/Event Description-->
+              <div class="wsthreeicon"><span class="glyphicon glyphicon-phone"></span></div><!--Body/Event Icon-->
+              <div class="wsthreeevent">
+                {{smsNbr}}
+              </div><!--Body/Event Description-->
+              <div class="wsthreeicon"><span class="glyphicon glyphicon-flash"></span></div><!--Body/Event Icon-->
+              <div class="wsthreeevent">
+                {{lastBatteryVoltage}}
+              </div><!--Body/Event Description-->
+            </div><!--Body/Event-->
+          </div>
+          <div class="wsfour"></div><!--Histogram-->
+
+          
+<!--
+idDevice: {{idDevice}}<br>
+idDevice Type: {{idDeviceType}}<br>
+idCustomer: {{idCustomer}}<br>
+Serial #: {{serialNbr}}<br>
+SMS number: {{smsNbr}}<br>
+-->
+
+        </div> <!-- end headline-->
+      </div> <!-- end container-->
+        <div class="wsTools">
+                      
+            <div class="toolbtnholder">
+              <button class="wsico inputaddonmod wstoolbuttons btn glyphicon glyphicon-option-horizontal btnModal" type="button" data-toggle="modal" data-target="#assetModal">
+              </button>
+            </div>
+            <div class="toolbtnholder">
+              <button class="wsico inputaddonmod wstoolbuttons btn glyphicon glyphicon-bell" type="button">
+              </button>
+              <span class="badgealert badge">{{alerts}}</span>
+            </div>
+                
+        </div>
+    </div>
+</template>

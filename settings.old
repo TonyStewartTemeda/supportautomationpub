@@ -1,0 +1,36 @@
+{
+  "TWILIO": {
+    "FROM": "4403791044", // One of the phone numbers tied to your Twilio account
+    "SID": "ACb78d7eed07c3818de062e2302cfe8faf", // SID tied to your Twilio account
+    "TOKEN": "ffcd4887105ddea148bdada4e44fae44" // Token tied to your Twilio account
+  }
+}
+
+// Configure the Twilio client
+var client = new Twilio({
+  from: Meteor.settings.TWILIO.FROM,
+  sid: Meteor.settings.TWILIO.SID,
+  token: Meteor.settings.TWILIO.TOKEN
+});
+
+// Send a message
+client.sendSMS({
+  to: '+14405271515',
+  body: 'Hello world!'
+});
+
+// Send a message with an image
+client.sendMMS({
+  to: '+18646978257',
+  body: 'Hello world!',
+  mediaUrl: 'http://images.clipartpanda.com/world-clip-art-World-Clip-Art-811.jpg'
+});
+
+// Make a call
+client.makeCall({ to: '+18646978257' });
+
+// Get information about the number
+client.lookup('+18646978257');
+
+// Get information about the number asynchronously
+client.lookup('+18646978257', function (error, info) {});
