@@ -23,8 +23,8 @@ if (Meteor.isServer) {
     
     //SMS Code grabbed from Skot. I need to move this API key storage.
     // least secure API key storage in history
-    var twilioSid = '';
-    var twilioToken = '';
+    var twilioSid = 'ACb78d7';
+    var twilioToken = 'ffcd4887';
 
     // initialize Twilio object
     twilio = Twilio(twilioSid, twilioToken);
